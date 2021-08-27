@@ -52,7 +52,11 @@ class CarController extends Controller
     public function getData()
     {
         $get = $this->car->getAll();
-        return DataTables::of($get)->make(true);
+        return DataTables::of($get)->addColumn('action', function($get){
+            return '<a href="'.route('viewData',['id'=> $get->id]).'" class="btn btn-sm btn-outline-warning" title="Show Car">View</a>
+            <a href="'.route('editData',['id'=> $get->id]).'" class="btn btn-sm btn-outline-info" title="Edit Car">Edit</a>
+            <a href="#" class="btn btn-sm btn-outline-danger delete" id="'.$get->id.'" title="Delete Car">Delete</a>';
+            })->make(true);
     }
 
     /**
@@ -63,7 +67,8 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        //
+        $car = $this->car->viewData($id);
+        return view('pages.view',compact('car'));
     }
 
     /**
@@ -74,7 +79,8 @@ class CarController extends Controller
      */
     public function edit($id)
     {
-        //
+        $car = $this->car->viewData($id);
+        return view('pages.edit',compact('car'));
     }
 
     /**
@@ -86,7 +92,7 @@ class CarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       $this->car->saveData($request, $id);
     }
 
     /**
@@ -95,8 +101,10 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if($this->car->viewData($request->input('id'))->delete()){
+            return 'Data Deleted';
+        }
     }
 }

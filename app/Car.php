@@ -1,19 +1,27 @@
 <?php
 
-namespace App;
+namespace App; 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Car extends Model
 {
+    use SoftDeletes;
+
+
     protected $fillable = [
         'name','brand','color','qty'
     ];
 
-    public function saveData($request){
+    protected $dates = ['deleted_at'];
+
+    public function saveData($request, $id=false){
 
         $car = new Car;
         
+      if($id) $car = $this->find($id);
+
         $car->name = $request->name;
         $car->brand = $request->brand;
         $car->color = $request->color;
@@ -24,6 +32,12 @@ class Car extends Model
 
     public function getAll()
     {
-        return self::select('*')->get();
+        return self::select('*')->withTrashed()->get();
     }
+
+    public function viewData($id){
+        return self::find($id);
+    }
+
+   
 }

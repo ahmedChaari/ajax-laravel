@@ -23,5 +23,12 @@ Route::get('create', 'CarController@create')->name('create');
 
 Route::post('store', 'CarController@store')->name('store');
 
-
 Route::get('getData', 'CarController@getData')->name('getData');
+
+Route::get('viewData/{id}', 'CarController@show')->name('viewData');
+
+Route::get('editData/{id}', 'CarController@edit')->name('editData');
+
+Route::post('updateData/{id}', 'CarController@update')->name('updateData');
+
+Route::get('delete', 'CarController@destroy')->name('destroy');
