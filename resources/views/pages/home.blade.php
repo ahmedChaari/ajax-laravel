@@ -2,6 +2,8 @@
 @section('content')
 
 <a href="{{ route('create') }}" class="btn btn-success mb-2" >Create</a>
+<button class="btn btn-info float-right" id="refresh">Refresh</button>
+<hr>
 <div class="table-responsive">
     <table class="table table-hover dataTables" with="100%" id="car_table">
         <thead with="100%">
@@ -32,7 +34,9 @@
                 {"data":"color"},
                 {"data":"qty"},
             ]
-
+        });
+        $('#refresh').click(function(){
+            table.ajax.reload();
         });
     });
 
